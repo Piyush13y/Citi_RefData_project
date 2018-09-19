@@ -3,6 +3,7 @@
 */
 
 function cambiar_login() {
+	
   document.querySelector('.cont_forms').className = "cont_forms cont_forms_active_login";  
 document.querySelector('.cont_form_login').style.display = "block";
 document.querySelector('.cont_form_sign_up').style.opacity = "0";               
@@ -12,6 +13,10 @@ setTimeout(function(){  document.querySelector('.cont_form_login').style.opacity
 setTimeout(function(){    
 document.querySelector('.cont_form_sign_up').style.display = "none";
 },200);  
+  }
+  
+ function cambiar_login1() {
+	if ((document.getElementById('username')== "Harshith" && document.getElementById('password')=="citi123"))return 'https:\\dwww.google.co.in' ; else document.getElementById("error").innerHTML="invalid" ; 
   }
 
 function cambiar_sign_up(at) {
