@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>CityScapes Landing Page Template</title>
+  <style>
+/* If you wish to remove the astonish.js file, then also be sure to remove these styles. */
+     .astonish {
+          visibility: visible;
+      }
+
+      @media (min-width: 768px) {
+          .astonish {
+               visibility: hidden;
+           }
+           .animated {
+                visibility: visible;
+           }
+       }
+</style>
+<style>
+
+</style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css'>
+<link rel='stylesheet' href='https://rawgit.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/css/styles.css'>
+<link rel='stylesheet' href='file:///C:/Users/Grad/Downloads/cityscapes-landing-page-template/styleoverlay.css'>
+  
+  
+</head>
+
+<body>
+
+  <!-- Main Navigation -->
+<!--<nav class="main-nav" id="main-nav">
+ <div class="content-wrapper-sm">
+  <a href="#" class="navbar-brand">Team_Name</a>
+  <div id="menu-button">
+   <div class="bar1"></div>
+   <div class="bar2"></div>
+   <div class="bar3"></div>
+  </div>
+  <ul class="nav-links">
+-->
+
+<div id="myNav" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <div class="overlay-content">
+    <a href="#">About</a>
+    <a href="#">Services</a>
+    <a href="#">Clients</a>
+    <a href="#">Contact</a>
+  </div>
+</div>
+<!--</nav>-->
+<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+<script>
+/* Open */
+function openNav() {
+    document.getElementById("myNav").style.height = "100%";
+}
+
+/* Close */
+function closeNav() {
+    document.getElementById("myNav").style.height = "0%";
+}</script>
+<!-- Main header -->
+<header>
+ <!-- First replaceble image -->
+ <!--<img class="img-absolute" src="https://raw.githubusercontent.com/Jesus-E-Rodriguez/cityscapes-landing-page/88c9b44e3def10ae253dd8d44b717cfa78cca42d/img/city.png" alt="City 1">-->
+ <div class="wrapper astonish animated fadeInDown">
+  <h1><strong>Team</strong>Name</h1>
+  <h2>Reference Database for OTC Transaction <br>
+                    Created by Team 1.</h2>
+ </div>
+</header>
+
+<!-- Main content -->
+<main >
+ <div class="content-wrapper" id="about">
+  <!-- second replaceble image -->
+  <img class="img-absolute" src="https://raw.githubusercontent.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/img/city2.png" alt="City 2">
+  <div class="grid">
+   <div class="grid-col-sm-12 grid-col-md-6 astonish" data-animation="fadeInLeft">
+    <h2 class="section-title">About Team_Name</h2>
+    <p>The platform will help you in keeping a record for all the securities you are interested to trade in  </p>
+    <p>It will also reflect the accrued interest, market YTM, and market price for three days </p>
+    
+   </div>
+  </div>
+ </div>
+
+ <div id="reserve" class="content-wrapper-lg text-center astonish" data-animation="zoomIn">
+  <h2 class="section-title">Explore Other Possibilities </h2>
+  <p>To understand how to use the platform click on the button below</p>
+  <a href="https://youtube.com" class="btn btn-outline-purple" target="_blank">Watch Introduction Video</a>
+ </div>
+
+ <div class="content-wrapper" id="contact">
+  <!-- Third replaceble image -->
+  <img class="img-absolute" src="https://raw.githubusercontent.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/img/city3.png" alt="City 3">
+
+  <!-- Custom form, important note: you will need additional code in order to make this form work -->
+  <form class="contact-form astonish" action="#" method="post" data-animation="fadeInRight">
+   <h2 class="section-title">Contact Us for any query </h2>
+   <div class="grid">
+    <div class="grid-col-sm-12 grid-col-md-6">
+     <div class="form-group">
+      <input type="text" name="firstName" required>
+      <label for="firstName">First Name:</label>
+     </div>
+    </div>
+    <div class="grid-col-sm-12 grid-col-md-6">
+     <div class="form-group">
+      <input type="text" name="lastName" required>
+      <label for="lasttName">Last Name:</label>
+     </div>
+    </div>
+    <div class="grid-col-sm-12">
+     <div class="form-group">
+      <input type="text" name="email" required>
+      <label for="email">Email:</label>
+     </div>
+    </div>
+    <div class="grid-col-sm-12">
+     <div class="form-group">
+      <textarea name="message" required></textarea>
+      <label for="message">Message:</label>
+     </div>
+    </div>
+   </div>
+   <input class="btn btn-outline-teal" type="submit" value="Send">
+  </form>
+ </div>
+
+ <!-- This is an embedded Google map, this is easily customizable especially if you get a Google API key, this will allow for more customizable features. -->
+ <iframe id="map" src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d81584.50435706123!2d-80.8378430874413!3d35.23358937843391!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sus!4v1514142608486" frameborder="0" style="border:0" allowfullscreen></iframe>
+</main>
+
+<!-- Main footer -->
+<footer>
+ <div class="content-wrapper-sm display-flex-between">
+  <!-- Easily replaceble copyright information -->
+  <small>Your copyright 2017.</small>
+
+  <!-- Make sure to edit the links so that they go to your social media. -->
+  <div class="social-links">
+   <ul>
+    <li><a href="#"><i class="fa fa-facebook" ></i></a></li>
+    <li><a href="#"><i class="fa fa-twitter" aria-hidden="false"></i></a></li>
+    <li><a href="#"><i class="fa fa-snapchat-square" aria-hidden="true"></i></a></li>
+    <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+   </ul>
+  </div>
+ </div>
+</footer>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src='https://rawgit.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/js/astonish.js'></script>
+<script src='https://rawgit.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/js/menu.js'></script>
+<script src='https://rawgit.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/js/nav.js'></script>
+<script src='https://rawgit.com/Jesus-E-Rodriguez/cityscapes-landing-page/master/js/scroll.js'></script>
+
+  
+
+</body>
+
+</html>
