@@ -88,8 +88,8 @@ body {
   <div class="overlay-content">
     <div class="cont_centrar" >
 
-  <div class="cont_login">
-<div class="cont_info_log_sign_up" id="ye">
+  <div class="cont_login" id="ye">
+<div class="cont_info_log_sign_up" >
       <div class="col_md_login">
 <div class="cont_ba_opcitiy">
         
@@ -124,7 +124,12 @@ body {
  <div class="cont_form_login">
 <a href="#" onclick="ocultar_login_sign_up()" ><i class="material-icons">&#xE5C4;</i></a>
    <h2 style="margin-bottom:0%; font-size: 25px;">LOGIN</h2>
- <input type="text" id="username" placeholder="Email" />
+ <input
+    type="text"
+    pattern="/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/"
+    required
+	placeholder="Email"
+>
 <input type="password" id="password" placeholder="Password" />
 <p id="error"></p><br>
 <button  href="#" class="btn_login" id="login" onclick="javascript:cambiar_login1()">LOGIN</button>
