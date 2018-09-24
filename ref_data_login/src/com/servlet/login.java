@@ -30,26 +30,13 @@ public class login extends HttpServlet {
     
     
     
-//    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		// TODO Auto-generated method stub
-//		String username = request.getParameter("username");
-//		String password = request.getParameter("password");
-//		//System.out.println(username+password);
-//		
-//		UserDAO dao = new UserDAOImpl();
-//		//User u = dao.findUserbyUsername(username);
-//		System.out.println(username);
-////		if(u.getUsername().equals(username) && u.getPasscode().equals(password)) {
-////			request.setAttribute("user",username);
-////			RequestDispatcher dispatch = request.getRequestDispatcher("dashboard.jsp");
-////			dispatch.forward(request, response);			
-////		}else {
-////			
-////		}
-////		
-//		
-//		
-//	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+		
+		
+		
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -58,10 +45,25 @@ public class login extends HttpServlet {
 		// TODO Auto-generated method stub
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		System.out.println(username + password);
 		
-//		RequestDispatcher dispatch = request.getRequestDispatcher("dashboard.jsp");
-//		dispatch.forward(request, response);
+		UserDAO dao = new UserDAOImpl();
+		User u = dao.findUserbyUsername(username);
+		if(u==null) {
+			request.setAttribute("error","Username doesn't exist.");
+			RequestDispatcher dispatch = request.getRequestDispatcher("index.jsp");
+			dispatch.forward(request, response);
+			
+		}else {
+			
+			if(u.getUsername().equals(username) && u.getPasscode().equals(password)) {
+				request.setAttribute("user",username);
+				RequestDispatcher dispatch = request.getRequestDispatcher("dashboard.jsp");
+				dispatch.forward(request, response);			
+			}else {
+				request.setAttribute("error", "Incorrect password");
+				RequestDispatcher dispatch = request.getRequestDispatcher("index.jsp");
+				dispatch.forward(request, response);
+			}	
+		}
 	}
-
 }

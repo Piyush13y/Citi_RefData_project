@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h>Dikh gaya Bencho!</h> <% request.getAttribute("user");%>
+	<h>Dikh gaya Bencho! ye to  <% out.println(" " +request.getAttribute("user")); %>   h </h>
 </body>
 </html>

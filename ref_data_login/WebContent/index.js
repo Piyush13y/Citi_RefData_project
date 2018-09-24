@@ -1,4 +1,4 @@
-/* ------------------------------------ Click on login and Sign Up to  changue and view the effect
+/* ------------------------------------ Click on login and Sign Up to  change and view the effect
 ---------------------------------------
 */
 
@@ -8,7 +8,7 @@ function cambiar_login() {
 document.querySelector('.cont_form_login').style.display = "block";
 document.querySelector('.cont_form_sign_up').style.opacity = "0";               
 
-setTimeout(function(){  document.querySelector('.cont_form_login').style.opacity = "1"; },400);  
+setTimeout(function(){  document.querySelector('.cont_form_login').style.opacity = "1"; },10);  
   
 setTimeout(function(){    
 document.querySelector('.cont_form_sign_up').style.display = "none";
@@ -19,8 +19,7 @@ document.querySelector('.cont_form_sign_up').style.display = "none";
 	 var username= document.getElementById('username').value;
 	 var password= document.getElementById('password').value;
 	 
-	 if ((username == "123" && password=="123")) window.location.assign('login')  ; 
-	 else alert("invalid") ; 
+	// window.location.assign('login')  ;  
   }
 
 function cambiar_sign_up(at) {
@@ -37,7 +36,11 @@ setTimeout(function(){   document.querySelector('.cont_form_login').style.displa
 
 }    
 
-
+/*function check(){
+	var email = document.getElementById("email");
+	
+	document.getElementById("demo").innerHTML = "Paragraph changed!";
+}*/
 
 function ocultar_login_sign_up() {
 
@@ -46,8 +49,8 @@ document.querySelector('.cont_form_sign_up').style.opacity = "0";
 document.querySelector('.cont_form_login').style.opacity = "0"; 
 
 setTimeout(function(){
-document.querySelector('.cont_form_sign_up').style.display = "none";
-document.querySelector('.cont_form_login').style.display = "none";
+		document.querySelector('.cont_form_sign_up').style.display = "none";
+		document.querySelector('.cont_form_login').style.display = "none";
 },500);  
   
   }

@@ -22,7 +22,7 @@ public class UserDAOImpl implements UserDAO {
 			ps.setString(1, user.getUsername());
 			ps.setString(2, user.getPasscode());
 			
-			rowsAdded=ps.executeUpdate();
+ 			rowsAdded=ps.executeUpdate();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			// TODO Handle exceptions properly
@@ -35,23 +35,19 @@ public class UserDAOImpl implements UserDAO {
 	public User findUserbyUsername(String Username) {
 		User user=null;
 		String FIND_BY_USERNAME="SELECT * FROM USERS WHERE USERNAME=?";
-		try(Connection con=DatabaseConnection.openConnection();)
-		{
-			PreparedStatement ps=con.prepareStatement(FIND_BY_USERNAME);
+		try(Connection con = DatabaseConnection.openConnection();){
+			PreparedStatement ps = con.prepareStatement(FIND_BY_USERNAME);
 			ps.setString(1, Username);
 			ResultSet set=ps.executeQuery();
 			
-			if(set.next())
-			{
+			if(set.next()){
 				String Passcode = set.getString("passcode");
 				user=new User(Username, Passcode);				
 			}
-		} catch(SQLException e)
-		{
+		} catch(SQLException e){
 			e.printStackTrace();
 		}
 		return user;
-
 	}
 
 	@Override
