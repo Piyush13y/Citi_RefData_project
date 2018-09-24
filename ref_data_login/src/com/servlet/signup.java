@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.beans.User;
 import com.daos.UserDAO;
@@ -31,10 +32,10 @@ public class signup extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+//	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		// TODO Auto-generated method stub
+//		response.getWriter().append("Served at: ").append(request.getContextPath());
+//	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -43,6 +44,7 @@ public class signup extends HttpServlet {
 		// TODO Auto-generated method stub
 		String userid = request.getParameter("email");
 		String password = request.getParameter("passcode");
+		System.out.println(userid+":"+password); 
 		
 		UserDAO dao = new UserDAOImpl();
 		User user = dao.findUserbyUsername(userid);
@@ -50,17 +52,22 @@ public class signup extends HttpServlet {
 			User u = new User(userid,password);
 			int k = dao.addUser(u);
 			if(k>0) {
-				request.setAttribute("message","User added successfully");
-				RequestDispatcher dispatch = request.getRequestDispatcher("index.jsp");
-				dispatch.forward(request, response);				
+				
+				HttpSession session = request.getSession();
+				String msg = "User added successfully";
+				session.setAttribute("message", msg);
+				response.sendRedirect("index.jsp");
+				//request.setAttribute("message","User added successfully");
+		
 			} else {
-				request.setAttribute("message","Error! Please try again.");
+				
+				request.setAttribute("err","Error! Please try again.");
 				RequestDispatcher dispatch = request.getRequestDispatcher("index.jsp");
 				dispatch.forward(request, response);	
 			}
 			
 		} else {
-			request.setAttribute("message","Error! Username already exist.");
+			request.setAttribute("err","Error! Username already exist.");
 			RequestDispatcher dispatch = request.getRequestDispatcher("index.jsp");
 			dispatch.forward(request, response);
 		}

@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h>Dikh gaya Bencho! ye to  <% out.println(" " +request.getAttribute("user")); %>   h </h>
+	<h>Dikh gaya Bencho! ye to  <% out.println(" " +session.getAttribute("user")); %>   h </h><br>
+	<a href="index.jsp"> Logout</a>
 </body>
 </html>

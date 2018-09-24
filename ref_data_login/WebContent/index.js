@@ -54,3 +54,16 @@ setTimeout(function(){
 },500);  
   
   }
+
+function check() {
+	document.getElementById('message1').hidden= false;
+	document.getElementById('linegap').hidden= true;
+	  if (document.getElementById('pswd').value ==
+	    document.getElementById('pswd2').value) {
+	    document.getElementById('message1').style.color = 'green';
+	    document.getElementById('message1').innerHTML = 'matching';
+	  } else {
+	    document.getElementById('message1').style.color = 'red';
+	    document.getElementById('message1').innerHTML = 'not matching';
+	  }
+	}

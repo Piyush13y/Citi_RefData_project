@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.beans.User;
 import com.daos.UserDAO;
@@ -56,9 +57,9 @@ public class login extends HttpServlet {
 		}else {
 			
 			if(u.getUsername().equals(username) && u.getPasscode().equals(password)) {
-				request.setAttribute("user",username);
-				RequestDispatcher dispatch = request.getRequestDispatcher("dashboard.jsp");
-				dispatch.forward(request, response);			
+				HttpSession session = request.getSession();
+				session.setAttribute("user", username);
+				response.sendRedirect("dashboard.jsp");
 			}else {
 				request.setAttribute("error", "Incorrect password");
 				RequestDispatcher dispatch = request.getRequestDispatcher("index.jsp");
