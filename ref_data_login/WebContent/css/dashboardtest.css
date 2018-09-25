@@ -1,0 +1,26 @@
+DIV.stack-vert
+{
+    border: solid thick red;
+    overflow:hidden;
+}
+
+DIV.content
+{
+    padding: 5px;
+    background-color: grey;
+    margin: 5px;
+
+}
+DIV.content2
+{
+    padding: 5px;
+    background-color:lightgray;
+	text-align:center;
+    margin:auto;
+
+}
+
+DIV.stack-horz > DIV.content
+{
+    float:left;
+}

@@ -59,7 +59,7 @@ public class login extends HttpServlet {
 			if(u.getUsername().equals(username) && u.getPasscode().equals(password)) {
 				HttpSession session = request.getSession();
 				session.setAttribute("user", username);
-				response.sendRedirect("dashboard.jsp");
+				response.sendRedirect("./dashboard/home.jsp");
 			}else {
 				request.setAttribute("error", "Incorrect password");
 				RequestDispatcher dispatch = request.getRequestDispatcher("index.jsp");

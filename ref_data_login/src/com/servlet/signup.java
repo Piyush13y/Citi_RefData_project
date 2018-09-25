@@ -43,6 +43,7 @@ public class signup extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String userid = request.getParameter("email");
+//		String uname = request.getParameter("uname");
 		String password = request.getParameter("passcode");
 		System.out.println(userid+":"+password); 
 		

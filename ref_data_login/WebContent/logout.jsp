@@ -7,7 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h>Dikh gaya Bhai! ye to  <% out.println(" " +session.getAttribute("user")); %>   h </h><br>
-	<a href="logout.jsp"> Logout</a>
+	<% session.invalidate();
+	   request.setAttribute("msg","Logged out successfully! <br> Please login again to continue.." );
+	   request.getRequestDispatcher("index.jsp").forward(request, response);%>>
 </body>
 </html>
