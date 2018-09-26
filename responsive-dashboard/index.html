@@ -675,10 +675,57 @@
                       <div class="row">
                         <div class="col-xs-9">
                           <form action="tradeinput" method="post">
-							 Security name: <input type="text" name="name" placeholder="Name"  style="margin-left:20px"><br>
-							 Trade-date: <input type="date" name="donedate" style="margin-left:40px" ><br>
-							<input type="submit" >
-							</form>
+							 							 
+							 Trade-date : <span id="donedate" name="donedate" style="margin-left:40px"></span><br>
+							 Trade-time: <span id="time" name="time" style="margin-left:40px"></span><br>
+							 Security name: <select name="cars" id="security" onchange="updatesec()" style="margin-left:20px">
+													<option value="Volvo" >Volvo</option>
+													<option value="saab">Saab</option>
+													<option value="fiat">Fiat</option>
+													<option value="audi">Audi</option>
+													</select><br>
+							Trade: <select name="trade" id="trade" onchange="updatetrade()" style="margin-left:75px">
+													<option value="Buy" >Buy</option>
+													<option value="Sell">Sell</option>
+													</select><br>
+													<span id="msg"></span>
+													<span id="msg1"></span>
+													
+							Counterparty:<input type="text" name="counterparty" placeholder="Party Name" style="margin-left:30px">
+							Settlement Date: <input type="date" name="setdate" style="margin-left:7px">
+							Traded Price:<input type="radio" name="method" id="decimalInput" onchange="display()" value="decimalInput" style="margin-left:30px"> Decimal Input<br>
+										 <input type="radio" name="method" id="fractionInput" onchange="display()" value="fractionInput" style="margin-left:112px"> Fraction input<br>
+										  <span id="decimalvalue1" style="margin-left:112px" hidden ><input type="text" name="decimal" placeholder="Price in Decimals"></span>
+										  <span id="fraction1" style="margin-left:112px" hidden><input type="text" name="fraction_whole" placeholder="Price in whole number"><input type="text" name="fraction_frac" placeholder="Multiples of 1/32" style="margin-left:112px"></span>
+										  
+										  
+													<script> 
+													function display(){
+													
+													if( document.getElementById("decimalInput").checked==true){
+																document.getElementById("decimalvalue1").hidden=false;
+																document.getElementById("fraction1").hidden=true;}
+													if( document.getElementById("fractionInput").checked==true){
+																document.getElementById("decimalvalue1").hidden=true;
+																document.getElementById("fraction1").hidden=false;}	
+													
+																
+																}
+
+													function updatesec(){
+													p=document.getElementById("security").value;
+													 document.getElementById("msg").innerHTML=p;}
+													function updatetrade(){
+													q=document.getElementById("trade").value;
+													document.getElementById("msg1").innerHTML=q;}
+													
+							 var d= new Date();
+							 var r = d.getMonth()+1;
+							 document.getElementById("donedate").innerHTML=d.getDate()+"/"+r+"/"+d.getFullYear()+" (dd/mm/yyyy)";
+							 document.getElementById("time").innerHTML=d.getHours()+":"+d.getMinutes()+":"+d.getSeconds();						 
+							 </script>	
+							<input type="submit" style="margin-left:120px">
+							</form>	
 							</div>
 						</div>
 						</div>
