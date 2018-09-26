@@ -28,18 +28,10 @@ public class TradeDAOImpl implements TradeDAO {
 			PreparedStatement ps=con.prepareStatement(ADDTRADE);
 			ps.setDate(1, trade.getTradeDate());
 			ps.setTime(2, trade.getTradeTime());
-			//ps.setInt(3, trade.getSecDetails().getSecId());
 			ps.setString(3, trade.getTradeType());
 			ps.setString(4, trade.getTradePrice());
 			ps.setString(5, trade.getCounterparty());
 			ps.setDate(6, trade.getSettlementDate());
-//			StringBuilder str = new StringBuilder();
-//			List<Accrued> list = trade.getAccrued();
-//			for(int i=0;i<list.size();i++) {
-//				str.append(list.get(i).getAccruedDays()+" "+list.get(i).getAccruedInterest()+" "+list.get(i).getMarketPrice()+" "+list.get(i).getMarketYield()+",");
-//			}
-//			ps.setString(8, str.toString());
-			//ps.setObject(8, str);
 			ps.setDate(7, trade.getLastCouponDate());
 			ps.setFloat(8, trade.getTicks());
 			ps.setFloat(9,trade.getDirtyPrice());
@@ -56,40 +48,40 @@ public class TradeDAOImpl implements TradeDAO {
 		return rowsAdded;
 	}
 
-	@Override
-	public Trade findTradeByTradeId(int tradeId) {
-		// TODO Auto-generated method stub
-		Trade trade=null;
-		String FIND_BY_TradeId="SELECT * FROM TRADES WHERE TRADEID=?";
-		try(Connection con=DatabaseConnection.openConnection();)
-		{
-			PreparedStatement ps=con.prepareStatement(FIND_BY_TradeId);
-			ps.setInt(1, tradeId);
-			ResultSet set=ps.executeQuery();
-			
-			while(set.next())
-			{
-				String ISIN1=set.getString(10);
-				int secid=set.getInt(1);
-				String secname=set.getString(2);
-				String issuername=set.getString(3);
-				Float facevalue=set.getFloat(4);
-				Float couponrate=set.getFloat(5);
-				int frequency=set.getInt(6);
-				Date matdate=set.getDate(7);
-				int dcc=set.getInt(8);
-				String coupondates=set.getString(9);
-				security=new Security(secid, secname, issuername, facevalue, couponrate, frequency, matdate, dcc, coupondates, ISIN1);
-				
-				
-			}
-		} catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-		return security;
-		return null;
-	}
+//	@Override
+//	public Trade findTradeByTradeId(int tradeId) {
+//		// TODO Auto-generated method stub
+//		Trade trade=null;
+//		String FIND_BY_TradeId="SELECT * FROM TRADES WHERE TRADEID=?";
+//		try(Connection con=DatabaseConnection.openConnection();)
+//		{
+//			PreparedStatement ps=con.prepareStatement(FIND_BY_TradeId);
+//			ps.setInt(1, tradeId);
+//			ResultSet set=ps.executeQuery();
+//			
+//			while(set.next())
+//			{
+//				String ISIN1=set.getString(10);
+//				int secid=set.getInt(1);
+//				String secname=set.getString(2);
+//				String issuername=set.getString(3);
+//				Float facevalue=set.getFloat(4);
+//				Float couponrate=set.getFloat(5);
+//				int frequency=set.getInt(6);
+//				Date matdate=set.getDate(7);
+//				int dcc=set.getInt(8);
+//				String coupondates=set.getString(9);
+//				security=new Security(secid, secname, issuername, facevalue, couponrate, frequency, matdate, dcc, coupondates, ISIN1);
+//				
+//				
+//			}
+//		} catch(SQLException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		return security;
+//		return null;
+//	}
 
 	@Override
 	public Trade findTradeByUserName(String userName) {
@@ -105,6 +97,12 @@ public class TradeDAOImpl implements TradeDAO {
 
 	@Override
 	public List<Trade> findAllTradesByISIN(String ISINh) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Trade findTradeByTradeId(int tradeId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

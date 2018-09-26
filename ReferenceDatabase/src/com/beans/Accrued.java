@@ -11,8 +11,6 @@ public class Accrued {
 	public Accrued() {
 		super();
 	}
-
-
 	
 	public Accrued(int accruedDays, float accruedInterest, String marketPrice, float marketYield) {
 		super();
@@ -22,22 +20,17 @@ public class Accrued {
 		MarketYield = marketYield;
 	}
 
-
-
 	public int getAccruedDays() {
 		return AccruedDays;
 	}
-
 
 	public void setAccruedDays(int accruedDays) {
 		AccruedDays = accruedDays;
 	}
 
-
 	public float getAccruedInterest() {
 		return AccruedInterest;
 	}
-
 
 	public void setAccruedInterest(float accruedInterest) {
 		AccruedInterest = accruedInterest;
@@ -48,23 +41,16 @@ public class Accrued {
 		return MarketPrice;
 	}
 
-
 	public void setMarketPrice(String marketPrice) {
 		MarketPrice = marketPrice;
 	}
-
 
 	public float getMarketYield() {
 		return MarketYield;
 	}
 
-
 	public void setMarketYield(float marketYield) {
 		MarketYield = marketYield;
 	}
 	
-	
-	
-	
-
 }

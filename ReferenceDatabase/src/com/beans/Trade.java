@@ -34,7 +34,7 @@ public class Trade {
 		Counterparty="coun";
 		SettlementDate=new Date(2018, 12, 26);
 		this.accrued = new LinkedList<>();
-		new Date(2018, 12,26),
+		new Date(2018, 12,26);
 //		34.76f,56.65f,45.34f,sec,user
 	}
 
