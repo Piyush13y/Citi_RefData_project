@@ -2,20 +2,29 @@ function showDash(){
 	document.getElementById("dash").hidden=false;
 	document.getElementById("log").hidden=true;
 	document.getElementById("input").hidden=true;
+	document.getElementById("sec").hidden=true;
 }
 
 function showInput(){
 	document.getElementById("dash").hidden=true;
 	document.getElementById("log").hidden=true;
 	document.getElementById("input").hidden=false;
+	document.getElementById("sec").hidden=true;
 }
 
 function showLog(){
 	document.getElementById("dash").hidden=true;
 	document.getElementById("log").hidden=false;
 	document.getElementById("input").hidden=true;
+	document.getElementById("sec").hidden=true;
 }
 
+function showSec(){
+	document.getElementById("dash").hidden=true;
+	document.getElementById("log").hidden=true;
+	document.getElementById("input").hidden=true;
+	document.getElementById("sec").hidden=false;
+}
 var data = [
   { year: '2012', a: 24.6, b: 30.9, c:24.8 },
   { year: '2013', a: 30.0, b: 27.5, c:20.0 },

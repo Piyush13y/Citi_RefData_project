@@ -37,6 +37,9 @@ public class add_securities extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		System.out.println("PIYUUSH");
+		
 		String SECURITY_NAME=request.getParameter("SECURITY_NAME");
 		String ISSUER_NAME=request.getParameter("ISSUER_NAME");
 		int FREQUENCY=Integer.parseInt(request.getParameter("FREQUENCY"));
@@ -53,7 +56,7 @@ public class add_securities extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Security security=new Security(0, SECURITY_NAME, ISSUER_NAME, FACE_VALUE, 4.23f, FREQUENCY, MATURITY_DATE, DAY_COUNT_CONVENTION, COUPON_DATES, ISIN);
+		Security security=new Security(10101, SECURITY_NAME, ISSUER_NAME, FACE_VALUE, 4.23f, FREQUENCY, MATURITY_DATE, DAY_COUNT_CONVENTION, COUPON_DATES, ISIN);
 		
 				
 				//System.out.println("ISIN="+ISIN);
