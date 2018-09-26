@@ -1,6 +1,7 @@
 package com.servlet;
 
 import java.io.IOException;
+import java.sql.Connection;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 import com.beans.Security;
+import com.connections.DatabaseConnection;
 import com.daos.SecurityDAO;
 import com.impl.SecurityDAOImpl;
 
@@ -35,16 +37,19 @@ public class show extends HttpServlet {
 	 */
 	
     
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-    	System.out.println("Hello i got here");
+    	
+    	String ISIN=request.getParameter("ISIN");
+    	System.out.println("ISIN="+ISIN);
 	SecurityDAO dao= new SecurityDAOImpl();
-	Security security =dao.findSecuritybyISIN("US1234576EW");
+	Security security =dao.findSecuritybyISIN(ISIN);
 	request.setAttribute("security",security);
+	
 	RequestDispatcher dispatcher = request.getRequestDispatcher("show.jsp");
 	dispatcher.forward(request,response);
 	
 	
 	}
-
 }
