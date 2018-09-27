@@ -25,7 +25,7 @@ public class Trade {
 	private User UserDetails;
 	
 	public Trade() {
-		TradeId=12;
+		TradeId=null;
 		TradeDate=new Date(2018,9,26);
 		TradeTime=new Time(3,34,45);
 		TradeType ="reli";
@@ -33,8 +33,14 @@ public class Trade {
 		TradePrice="100-12";
 		Counterparty="coun";
 		SettlementDate=new Date(2018, 12, 26);
-		this.accrued = new LinkedList<>();
-		new Date(2018, 12,26);
+		accrued = new LinkedList<>();
+		LastCouponDate=new Date(2018, 12,26);
+		Ticks=(float) 0.375;
+		CleanPrice=234.5f;
+		SecDetails=new Security(12, "ghjk", "ytre", 34.27f, 23.56f, 23, 
+				new Date(2018, 12, 22), 12, "see", "SIN");
+		UserDetails = new User(1122324,"username", "passcode","nisha","chaudhary","female","2345678");
+		
 //		34.76f,56.65f,45.34f,sec,user
 	}
 
@@ -86,6 +92,15 @@ public class Trade {
 	public Date getTradeDate() {
 		return TradeDate;
 	}
+	@Override
+	public String toString() {
+		return "Trade [TradeId=" + TradeId + ", TradeDate=" + TradeDate + ", TradeTime=" + TradeTime + ", TradeType="
+				+ TradeType + ", TradePrice=" + TradePrice + ", Counterparty=" + Counterparty + ", SettlementDate="
+				+ SettlementDate + ", accrued=" + accrued + ", LastCouponDate=" + LastCouponDate + ", Ticks=" + Ticks
+				+ ", DirtyPrice=" + DirtyPrice + ", CleanPrice=" + CleanPrice + ", SecDetails=" + SecDetails
+				+ ", UserDetails=" + UserDetails + "]";
+	}
+
 	public void setTradeDate(Date tradeDate) {
 		TradeDate = tradeDate;
 	}

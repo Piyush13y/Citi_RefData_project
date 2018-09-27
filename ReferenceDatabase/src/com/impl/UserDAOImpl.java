@@ -21,10 +21,10 @@ public class UserDAOImpl implements UserDAO {
 			PreparedStatement ps=con.prepareStatement(ADDUSER);
 			ps.setString(1, user.getUsername());
 			ps.setString(2, user.getPasscode());
-			ps.setString(3, null);
-			ps.setString(4, null);
-			ps.setInt(5, 0);
-			ps.setString(6, null);
+			ps.setString(3, user.getUserFname());
+			ps.setString(4, user.getUserLname());
+			ps.setString(5, user.getGender());
+			ps.setString(6,user.getContact());
 			rowsAdded=ps.executeUpdate();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -46,9 +46,9 @@ public class UserDAOImpl implements UserDAO {
 			
 			if(set.next())
 			{
-				String Passcode = set.getString("PASSCODE");
-				String user_fname = set.getString("USERFNAME");
-				String user_lname = set.getString("USERLNAME");
+				String Passcode = set.getString("passcode");
+				String user_fname = set.getString("userFname");
+				String user_lname = set.getString("userLname");
 				String contact = set.getString("contact");
 				String gender = set.getString("gender");
 			
@@ -82,7 +82,7 @@ public class UserDAOImpl implements UserDAO {
 	public int modifyUser(User user) {
 		// TODO Auto-generated method stub
 		int rowsModified=0;
-		String MODIFY_USER="UPDATE USERS SET USERS.PASSCODE=?, USERS.USERFNAME=?,USERS.USERLNAME=? , USERS.CONTACT=? ,USERS.GENDER=? WHERE USERNAME=?";
+		String MODIFY_USER="UPDATE USERS SET USERS.PASSCODE=?, USERS.USERFNAME=? ,USERS.USERLNAME=?, USERS.CONTACT=? ,USERS.GENDER=? WHERE USERNAME=?";
 		
 		try(Connection con=DatabaseConnection.openConnection();)
 		{
@@ -93,7 +93,24 @@ public class UserDAOImpl implements UserDAO {
 			ps.setString(3, user.getUserLname());
 			ps.setString(4, user.getContact());
 			ps.setString(5, user.getGender());
-			rowsModified = ps.executeUpdate();			
+			rowsModified = ps.executeUpdate();	
+		
+		
+//			ResultSet set=ps.executeQuery();
+//			
+//			if(set.next())
+//			{
+//				
+//				String Passcode = set.getString("passcode");
+//				String user_fname = set.getString("userFname");
+//				String user_lname = set.getString("userLname");
+//				String contact = set.getString("contact");
+//				String gender = set.getString("gender");
+//			
+//				user=new User(null, user.getUsername(), Passcode,user_fname,user_lname,contact,gender);				
+//			
+//				
+//			}
 		} catch(SQLException e)
 		{
 			e.printStackTrace();

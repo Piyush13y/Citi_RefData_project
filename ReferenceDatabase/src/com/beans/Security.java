@@ -3,7 +3,7 @@ package com.beans;
 import java.sql.Date;
 
 public class Security {
-	private int SecId;
+	private Integer SecId;
 	private String SecurityName;
 	private String IssuerName;
 	private float FaceValue;
@@ -14,7 +14,7 @@ public class Security {
 	private String CouponDates;
 	private String ISIN;
 	
-	public Security(int secId, String securityName, String issuerName, float faceValue, float couponRate, int frequency,
+	public Security(Integer secId, String securityName, String issuerName, float faceValue, float couponRate, int frequency,
 			Date maturityDate, int dayCountConvention, String couponDates, String iSIN) {
 		super();
 		SecId = secId;
@@ -29,11 +29,11 @@ public class Security {
 		ISIN = iSIN;
 	}
 
-	public int getSecId() {
+	public Integer getSecId() {
 		return SecId;
 	}
 
-	public void setSecId(int secId) {
+	public void setSecId(Integer secId) {
 		SecId = secId;
 	}
 

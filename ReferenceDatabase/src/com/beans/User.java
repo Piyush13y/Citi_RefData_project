@@ -69,6 +69,4 @@ public class User {
 				+ ", userLname=" + userLname + ", gender=" + gender + ", contact=" + contact + "]";
 	}
 	
-	
-		
 }
