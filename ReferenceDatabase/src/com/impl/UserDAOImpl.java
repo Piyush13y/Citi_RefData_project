@@ -14,14 +14,17 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public int addUser(User user) {
 		int rowsAdded=0;
-		String ADDUSER="INSERT INTO USERS VALUES(?,?)";
+		String ADDUSER="INSERT INTO USERS VALUES(?,?,?,?,?,?)";
 		
 		Connection con=DatabaseConnection.openConnection();
 		try {
 			PreparedStatement ps=con.prepareStatement(ADDUSER);
 			ps.setString(1, user.getUsername());
 			ps.setString(2, user.getPasscode());
-			
+			ps.setString(3, null);
+			ps.setString(4, null);
+			ps.setInt(5, 0);
+			ps.setString(6, null);
 			rowsAdded=ps.executeUpdate();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -43,8 +46,13 @@ public class UserDAOImpl implements UserDAO {
 			
 			if(set.next())
 			{
-				String Passcode = set.getString("passcode");
-				user=new User(null, Username, Passcode);				
+				String Passcode = set.getString("PASSCODE");
+				String user_fname = set.getString("USERFNAME");
+				String user_lname = set.getString("USERLNAME");
+				String contact = set.getString("contact");
+				String gender = set.getString("gender");
+			
+				user=new User(null, Username, Passcode,user_fname,user_lname,contact,gender);				
 			}
 		} catch(SQLException e)
 		{
@@ -74,18 +82,23 @@ public class UserDAOImpl implements UserDAO {
 	public int modifyUser(User user) {
 		// TODO Auto-generated method stub
 		int rowsModified=0;
-		String MODIFY_USER="UPDATE USERS SET USERS.PASSCODE=?, USERS.USERNAME=? WHERE USERNAME=?";
+		String MODIFY_USER="UPDATE USERS SET USERS.PASSCODE=?, USERS.USERFNAME=?,USERS.USERLNAME=? , USERS.CONTACT=? ,USERS.GENDER=? WHERE USERNAME=?";
 		
 		try(Connection con=DatabaseConnection.openConnection();)
 		{
 			PreparedStatement ps=con.prepareStatement(MODIFY_USER);
-			ps.setString(3, user.getUsername());
+			ps.setString(6, user.getUsername());
 			ps.setString(1, user.getPasscode());
-			ps.setString(2, user.getUsername());
+			ps.setString(2, user.getUserFname());
+			ps.setString(3, user.getUserLname());
+			ps.setString(4, user.getContact());
+			ps.setString(5, user.getGender());
 			rowsModified = ps.executeUpdate();			
 		} catch(SQLException e)
 		{
 			e.printStackTrace();
+		}catch(Exception e1) {
+			e1.printStackTrace();
 		}
 		return rowsModified;
 		

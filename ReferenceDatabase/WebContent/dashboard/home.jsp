@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
-</head>
+</head> -->
 	<!DOCTYPE html>
 <html lang="en" >
 
@@ -35,8 +35,7 @@
    String userId = (String)session.getAttribute("user");
    if(userId == null) {
       response.sendRedirect("../index.jsp");
-   } else{System.out.println("MC"+userId);}
-   %>
+   }    %>
   <div class="">
     <header class="navbar-fixed-top">
       <div class="row">
@@ -174,10 +173,10 @@
                   "fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i></a>
                   <ul class="dropdown-menu dropdown-user">
                     <li>
-                      <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                      <a href="user_profile.jsp"><i class="fa fa-user fa-fw"></i> User Profile</a>
                     </li>
                     <li>
-                      <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                      <a href="user_password.jsp"><i class="fa fa-gear fa-fw"></i> Settings</a>
                     </li>
                     <li class="divider"></li>
                     <li>
