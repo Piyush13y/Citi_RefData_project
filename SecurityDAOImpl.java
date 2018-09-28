@@ -32,7 +32,7 @@ public class SecurityDAOImpl implements SecurityDAO {
 			ps.setDate(7, security.getMaturityDate());
 			ps.setInt(8, security.getDayCountConvention());
 			ps.setString(9, security.getCouponDates());
-			ps.setString(10, security.getISIN());
+			ps.setString(10, security.getiSIN());
 			
 			rowsAdded=ps.executeUpdate();
 		} catch (Exception e) {
