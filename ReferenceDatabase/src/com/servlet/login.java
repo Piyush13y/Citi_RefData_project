@@ -1,6 +1,7 @@
 package com.servlet;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,8 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.beans.Security;
+import com.beans.Trade;
 import com.beans.User;
+import com.daos.SecurityDAO;
+import com.daos.TradeDAO;
 import com.daos.UserDAO;
+import com.impl.SecurityDAOImpl;
+import com.impl.TradeDAOImpl;
 import com.impl.UserDAOImpl;
 
 /**
@@ -49,6 +56,7 @@ public class login extends HttpServlet {
 		
 		UserDAO dao = new UserDAOImpl();
 		User u = dao.findUserbyUsername(username);
+		//System.out.println(u);
 		if(u==null) {
 			request.setAttribute("error","Username doesn't exist.");
 			RequestDispatcher dispatch = request.getRequestDispatcher("index.jsp");
@@ -58,9 +66,13 @@ public class login extends HttpServlet {
 			
 			if(u.getUsername().equals(username) && u.getPasscode().equals(password)) {
 				HttpSession session = request.getSession();
-				session.setAttribute("user", username);
-				session.setAttribute("userdetails", u);
-				
+				session.setAttribute("user", u);
+				SecurityDAO secdao = new SecurityDAOImpl();
+				List<Security> secList= secdao.findAllSecurities();
+				session.setAttribute("secList", secList);
+				TradeDAO trDAO= new TradeDAOImpl();
+				List<Trade> tradeList = trDAO.findTradeByUser(u.getId());
+				session.setAttribute("tradeList", tradeList);
 				response.sendRedirect("./dashboard/home.jsp");
 			}else {
 				request.setAttribute("error", "Incorrect password");

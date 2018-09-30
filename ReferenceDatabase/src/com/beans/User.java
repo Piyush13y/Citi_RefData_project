@@ -21,6 +21,15 @@ public class User {
 		this.gender = gender;
 		this.contact = contact;
 	}
+	public User() {
+		this.id = 0;
+		this.username = "";
+		this.passcode = "";
+		this.userFname = "";
+		this.userLname = "";
+		this.gender = "";
+		this.contact = "";
+	}
 	public Integer getId() {
 		return id;
 	}

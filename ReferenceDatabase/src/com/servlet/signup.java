@@ -50,7 +50,7 @@ public class signup extends HttpServlet {
 		UserDAO dao = new UserDAOImpl();
 		User user = dao.findUserbyUsername(userid);
 		if(user==null) {
-			User u = new User(12, userid,password,null,null,null,null);
+			User u = new User();
 			int k = dao.addUser(u);
 			if(k>0) {
 				

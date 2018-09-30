@@ -25,7 +25,7 @@ public class UserDAOImpl implements UserDAO {
 			ps.setString(4, user.getUserLname());
 			ps.setString(5, user.getGender());
 			ps.setString(6,user.getContact());
-			rowsAdded=ps.executeUpdate();
+			rowsAdded = ps.executeUpdate();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			// TODO Handle exceptions properly
@@ -46,13 +46,15 @@ public class UserDAOImpl implements UserDAO {
 			
 			if(set.next())
 			{
+				Integer userID = set.getInt("userid");
 				String Passcode = set.getString("passcode");
 				String user_fname = set.getString("userFname");
 				String user_lname = set.getString("userLname");
 				String contact = set.getString("contact");
+				
 				String gender = set.getString("gender");
 			
-				user=new User(null, Username, Passcode,user_fname,user_lname,contact,gender);				
+				user=new User(userID, Username, Passcode,user_fname,user_lname,gender,contact);				
 			}
 		} catch(SQLException e)
 		{
@@ -120,5 +122,65 @@ public class UserDAOImpl implements UserDAO {
 		return rowsModified;
 		
 	}
+
+	@Override
+	public User findUserByuserId(int userId) {
+		User user=null;
+		String FIND_BY_USERID="SELECT * FROM USERS WHERE USERID=?";
+		try(Connection con=DatabaseConnection.openConnection();)
+		{
+			PreparedStatement ps=con.prepareStatement(FIND_BY_USERID);
+			ps.setInt(1, userId);
+			ResultSet set=ps.executeQuery();
+			
+			if(set.next())
+			{
+				Integer userID = set.getInt("userid");
+				String userName = set.getString("username");
+				String Passcode = set.getString("passcode");
+				String user_fname = set.getString("userFname");
+				String user_lname = set.getString("userLname");
+				String contact = set.getString("contact");
+				String gender = set.getString("gender");
+			
+				user=new User(userID, userName, Passcode,user_fname,user_lname,gender,contact);				
+			}
+		} catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return user;
+	}
+
+//	@Override
+//	public int findUserId(String userName) {
+//		// TODO Auto-generated method stub
+//		int id =0;
+//		String FIND_BY_USERNAME="SELECT * FROM USERS WHERE USERNAME=?";
+//		try(Connection con=DatabaseConnection.openConnection();)
+//		{
+//			PreparedStatement ps=con.prepareStatement(FIND_BY_USERNAME);
+//			ps.setString(1, username);
+//			ResultSet set=ps.executeQuery();
+//			
+//			if(set.next())
+//			{
+//				Integer userID = set.getInt("userid");
+//				String Passcode = set.getString("passcode");
+//				String user_fname = set.getString("userFname");
+//				String user_lname = set.getString("userLname");
+//				String contact = set.getString("contact");
+//				
+//				String gender = set.getString("gender");
+//			
+//				user=new User(userID, Username, Passcode,user_fname,user_lname,gender,contact);				
+//			}
+//		} catch(SQLException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		return user;
+//
+//	}
 
 }

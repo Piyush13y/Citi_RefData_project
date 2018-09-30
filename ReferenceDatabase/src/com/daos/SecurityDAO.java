@@ -8,9 +8,11 @@ import com.beans.User;
 public interface SecurityDAO {
 	int addSecurity(Security security);
 	Security findSecuritybyISIN(String ISIN);
+	Security findSecuritybySecurityId(int securityId);
 	// TODO: Implement modifyUser
 	// int modifySecurity(User user);
 	int deleteSecurity(String ISIN);
 	List<Security> findAllSecurities();
+	
 
 }

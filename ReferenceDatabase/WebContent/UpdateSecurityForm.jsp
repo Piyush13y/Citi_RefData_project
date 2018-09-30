@@ -15,7 +15,6 @@
 			<input type="submit" value="submit">
 				
 	</form>
-
   <body>
   <div class="">
     <header class="navbar-fixed-top">

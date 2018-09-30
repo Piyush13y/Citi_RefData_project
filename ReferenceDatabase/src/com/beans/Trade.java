@@ -2,167 +2,197 @@ package com.beans;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Trade {
-	private Integer TradeId;
-	private Date TradeDate;
-	private Time TradeTime;
-	private String TradeType;
+	private Integer tradeId;
+	private Date tradeDate;
+	private Time tradeTime;
+	private String tradeType;
 	// TODO: Price can be fraction as well and it's not the same as decimal
-	private String TradePrice;
-	private String Counterparty;
-	private Date SettlementDate;
+	// TODO: See if marketPrice can be kept as a calculatable data type
+	private Double marketPrice;
+	private Double marketYield;
+	private Double tradePrice;
+	private Double tradeYield;
+	private String counterParty;
+	private Date settlementDate;
 	
-	private List<Accrued> accrued ;
+	private List<Accrued> accrued;
+	private Date lastCouponDate;
+	private Double ticks;
+	private Double dirtyPrice;
+	private Double cleanPrice;
+	private Security secDetails;
+	private User userDetails;
 	
-	private Date LastCouponDate;
-	private float Ticks;
-	private float DirtyPrice;
-	private float CleanPrice;
-	private Security SecDetails;
-	private User UserDetails;
-	
-	public Trade() {
-		TradeId=null;
-		TradeDate=new Date(2018,9,26);
-		TradeTime=new Time(3,34,45);
-		TradeType ="reli";
-		TradeType="buy";
-		TradePrice="100-12";
-		Counterparty="coun";
-		SettlementDate=new Date(2018, 12, 26);
-		accrued = new LinkedList<>();
-		LastCouponDate=new Date(2018, 12,26);
-		Ticks=(float) 0.375;
-		CleanPrice=234.5f;
-		SecDetails=new Security(12, "ghjk", "ytre", 34.27f, 23.56f, 23, 
-				new Date(2018, 12, 22), 12, "see", "SIN");
-		UserDetails = new User(1122324,"username", "passcode","nisha","chaudhary","female","2345678");
-		
-//		34.76f,56.65f,45.34f,sec,user
-	}
-
-	public Trade(Integer tradeId, Date tradeDate, Time tradeTime, String tradeType, String tradePrice,
-			String counterparty, Date settlementDate, List<Accrued> accrued, Date lastCouponDate, float ticks,
-			float dirtyPrice, float cleanPrice, Security secDetails, User userDetails) {
+	public Trade(Integer tradeId, Date tradeDate, Time tradeTime, String tradeType, Double marketPrice,
+			Double marketYield, Double tradePrice, Double tradeYield, String counterParty, Date settlementDate,
+			List<Accrued> accrued, Date lastCouponDate, Double ticks, Double dirtyPrice, Double cleanPrice,
+			Security secDetails, User userDetails) {
 		super();
-		TradeId = tradeId;
-		TradeDate = tradeDate;
-		TradeTime = tradeTime;
-		TradeType = tradeType;
-		TradePrice = tradePrice;
-		Counterparty = counterparty;
-		SettlementDate = settlementDate;
+		this.tradeId = tradeId;
+		this.tradeDate = tradeDate;
+		this.tradeTime = tradeTime;
+		this.tradeType = tradeType;
+		this.marketPrice = marketPrice;
+		this.marketYield = marketYield;
+		this.tradePrice = tradePrice;
+		this.tradeYield = tradeYield;
+		this.counterParty = counterParty;
+		this.settlementDate = settlementDate;
 		this.accrued = accrued;
-		LastCouponDate = lastCouponDate;
-		Ticks = ticks;
-		DirtyPrice = dirtyPrice;
-		CleanPrice = cleanPrice;
-		SecDetails = secDetails;
-		UserDetails = userDetails;
+		this.lastCouponDate = lastCouponDate;
+		this.ticks = ticks;
+		this.dirtyPrice = dirtyPrice;
+		this.cleanPrice = cleanPrice;
+		this.secDetails = secDetails;
+		this.userDetails = userDetails;
 	}
 
-	
-
-	public User getUserDetails() {
-		return UserDetails;
+	public Integer getTradeId() {
+		return tradeId;
 	}
 
-	public void setUserDetails(User userDetails) {
-		UserDetails = userDetails;
-	}
-	
-	public Security getSecDetails() {
-		return SecDetails;
-	}
-	public void setSecDetails(Security secDetails) {
-		SecDetails = secDetails;
-	}
 	public void setTradeId(Integer tradeId) {
-		TradeId = tradeId;
+		this.tradeId = tradeId;
 	}
-	public int getTradeId() {
-		return TradeId;
-	}
-	public void setTradeId(int tradeId) {
-		TradeId = tradeId;
-	}
+
 	public Date getTradeDate() {
-		return TradeDate;
-	}
-	@Override
-	public String toString() {
-		return "Trade [TradeId=" + TradeId + ", TradeDate=" + TradeDate + ", TradeTime=" + TradeTime + ", TradeType="
-				+ TradeType + ", TradePrice=" + TradePrice + ", Counterparty=" + Counterparty + ", SettlementDate="
-				+ SettlementDate + ", accrued=" + accrued + ", LastCouponDate=" + LastCouponDate + ", Ticks=" + Ticks
-				+ ", DirtyPrice=" + DirtyPrice + ", CleanPrice=" + CleanPrice + ", SecDetails=" + SecDetails
-				+ ", UserDetails=" + UserDetails + "]";
+		return tradeDate;
 	}
 
 	public void setTradeDate(Date tradeDate) {
-		TradeDate = tradeDate;
+		this.tradeDate = tradeDate;
 	}
+
 	public Time getTradeTime() {
-		return TradeTime;
+		return tradeTime;
 	}
+
 	public void setTradeTime(Time tradeTime) {
-		TradeTime = tradeTime;
+		this.tradeTime = tradeTime;
 	}
+
 	public String getTradeType() {
-		return TradeType;
+		return tradeType;
 	}
+
 	public void setTradeType(String tradeType) {
-		TradeType = tradeType;
+		this.tradeType = tradeType;
 	}
-	public String getTradePrice() {
-		return TradePrice;
+
+	public Double getMarketPrice() {
+		return marketPrice;
 	}
-	public void setTradePrice(String tradePrice) {
-		TradePrice = tradePrice;
+
+	public void setMarketPrice(Double marketPrice) {
+		this.marketPrice = marketPrice;
 	}
-	public String getCounterparty() {
-		return Counterparty;
+
+	public Double getMarketYield() {
+		return marketYield;
 	}
-	public void setCounterparty(String counterparty) {
-		Counterparty = counterparty;
+
+	public void setMarketYield(Double marketYield) {
+		this.marketYield = marketYield;
 	}
+
+	public Double getTradePrice() {
+		return tradePrice;
+	}
+
+	public void setTradePrice(Double tradePrice) {
+		this.tradePrice = tradePrice;
+	}
+
+	public Double getTradeYield() {
+		return tradeYield;
+	}
+
+	public void setTradeYield(Double tradeYield) {
+		this.tradeYield = tradeYield;
+	}
+
+	public String getCounterParty() {
+		return counterParty;
+	}
+
+	public void setCounterParty(String counterParty) {
+		this.counterParty = counterParty;
+	}
+
 	public Date getSettlementDate() {
-		return SettlementDate;
+		return settlementDate;
 	}
+
 	public void setSettlementDate(Date settlementDate) {
-		SettlementDate = settlementDate;
+		this.settlementDate = settlementDate;
 	}
+
 	public List<Accrued> getAccrued() {
 		return accrued;
 	}
+
 	public void setAccrued(List<Accrued> accrued) {
 		this.accrued = accrued;
 	}
+
 	public Date getLastCouponDate() {
-		return LastCouponDate;
-	}
-	public void setLastCouponDate(Date lastCouponDate) {
-		LastCouponDate = lastCouponDate;
-	}
-	public float getTicks() {
-		return Ticks;
-	}
-	public void setTicks(float ticks) {
-		Ticks = ticks;
-	}
-	public float getDirtyPrice() {
-		return DirtyPrice;
-	}
-	public void setDirtyPrice(float dirtyPrice) {
-		DirtyPrice = dirtyPrice;
-	}
-	public float getCleanPrice() {
-		return CleanPrice;
-	}
-	public void setCleanPrice(float cleanPrice) {
-		CleanPrice = cleanPrice;
+		return lastCouponDate;
 	}
 
+	public void setLastCouponDate(Date lastCouponDate) {
+		this.lastCouponDate = lastCouponDate;
+	}
+
+	public Double getTicks() {
+		return ticks;
+	}
+
+	public void setTicks(Double ticks) {
+		this.ticks = ticks;
+	}
+
+	public Double getDirtyPrice() {
+		return dirtyPrice;
+	}
+
+	public void setDirtyPrice(Double dirtyPrice) {
+		this.dirtyPrice = dirtyPrice;
+	}
+
+	public Double getCleanPrice() {
+		return cleanPrice;
+	}
+
+	public void setCleanPrice(Double cleanPrice) {
+		this.cleanPrice = cleanPrice;
+	}
+
+	public Security getSecDetails() {
+		return secDetails;
+	}
+
+	public void setSecDetails(Security secDetails) {
+		this.secDetails = secDetails;
+	}
+
+	public User getUserDetails() {
+		return userDetails;
+	}
+
+	public void setUserDetails(User userDetails) {
+		this.userDetails = userDetails;
+	}
+
+	@Override
+	public String toString() {
+		return "Trade [tradeId=" + tradeId + ", tradeDate=" + tradeDate + ", tradeTime=" + tradeTime + ", tradeType="
+				+ tradeType + ", marketPrice=" + marketPrice + ", marketYield=" + marketYield + ", tradePrice="
+				+ tradePrice + ", tradeYield=" + tradeYield + ", counterParty=" + counterParty + ", settlementDate="
+				+ settlementDate + ", accrued=" + accrued + ", lastCouponDate=" + lastCouponDate + ", ticks=" + ticks
+				+ ", dirtyPrice=" + dirtyPrice + ", cleanPrice=" + cleanPrice + ", secDetails=" + secDetails
+				+ ", userDetails=" + userDetails + "]";
+	}
 }

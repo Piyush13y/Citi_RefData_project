@@ -1,6 +1,8 @@
-show.java<%@page import="com.beans.Security"%>
+<%@page import="com.beans.Security"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import= "java.util.List" %> 
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,28 +11,32 @@ show.java<%@page import="com.beans.Security"%>
 </head>
 <body>
     <% 
-    Security security=(Security)request.getAttribute("security");
-	
+    //List<Security> securities= (List<Security>)request.getAttribute("securityList");
+    
 	%>
-	
-	<div class="table-title">
-		<h3>Data Table</h3>
-	</div>
-	<table class="table-fill"  >
+	<table border="1">
 	<thead>
 	<tr>
-	<th class="text-left">Month</th>
-	<th class="text-left">Sales</th>
-	<th class="text-left">Extra Info</th>
+	<th class="text-left">ISIN</th>
+	<th class="text-left">ISUUER</th>
+	<th class="text-left">FACE VALUE</th>
+	<th class="text-left">SECURITY NAME</th>
 	</tr>
 	</thead>
-	<tbody class="table-hover">
+	<tbody>
+	<c:forEach var="security" items="${securityList}"> 
 	<tr>
-	<td class="text-left">SECID</td>
-	<td class="text-left"><%security.getISIN(); %></td>
-	<td class="text-left"></td>
+		<td><c:out value="${security.iSIN}"></c:out> </td>
+		<td><c:out value="${security.issuerName}"></c:out> </td>
+		<td><c:out value="${security.faceValue}"></c:out> </td>
+		<td><c:out value="${security.securityName}"></c:out> </td>
 	</tr>
-	<tr>
+	</c:forEach>
+	</tbody>
+	</table>
+	
+	
+		<!-- <tr>
 	<td class="text-left">SEC_NAME</td>
 	<td class="text-left">$ 10,000.00</td>
 	<td class="text-left"></td>
@@ -79,9 +85,9 @@ show.java<%@page import="com.beans.Security"%>
 	<td class="text-left">$ 98,000.00</td>
 	<td class="text-left"></td>
 	</tr>
-	
+	 -->
 	</tbody>
 	</table>
-	<a href="/showservlet"></a>
+	<a href="/showservlet">III</a>
 </body>
 </html>

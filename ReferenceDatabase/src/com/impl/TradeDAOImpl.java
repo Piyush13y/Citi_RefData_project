@@ -5,11 +5,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Time;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.beans.Accrued;
@@ -17,7 +14,10 @@ import com.beans.Security;
 import com.beans.Trade;
 import com.beans.User;
 import com.connections.DatabaseConnection;
+import com.daos.AccruedDAO;
+import com.daos.SecurityDAO;
 import com.daos.TradeDAO;
+import com.daos.UserDAO;
 
 public class TradeDAOImpl implements TradeDAO {
 
@@ -26,7 +26,7 @@ public class TradeDAOImpl implements TradeDAO {
 		// TODO Auto-generated method stub
 		int rowsAdded=0;
 		
-		String ADDTRADE="INSERT INTO TRADES VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+		String ADDTRADE="INSERT INTO TRADES OUTPUT INSERTED.TRADEID VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		//String ADDTRADE2="SELECT * FROM TRADES,ACCRUEDS,SECURITIES WHERE TRADES.TRADEID=ACCRUEDS.TRADEID AND TRADES.SECID=SECURITIES.SECID";
 		
 		Connection con=DatabaseConnection.openConnection();
@@ -34,27 +34,30 @@ public class TradeDAOImpl implements TradeDAO {
 			PreparedStatement ps=con.prepareStatement(ADDTRADE);
 			ps.setDate(1, trade.getTradeDate());
 			ps.setTime(2, trade.getTradeTime());
-			//ps.setInt(3, trade.getSecDetails().getSecId());
 			ps.setString(3, trade.getTradeType());
-			ps.setString(4, trade.getTradePrice());
-			ps.setString(5, trade.getCounterparty());
-			ps.setDate(6, trade.getSettlementDate());
-
-			ps.setDate(7, trade.getLastCouponDate());
-			ps.setFloat(8, trade.getTicks());
-			ps.setFloat(9,trade.getDirtyPrice());
-			ps.setFloat(10, trade.getCleanPrice());
-			ps.setFloat(11, trade.getSecDetails().getSecId());
-			ps.setFloat(12, trade.getUserDetails().getId());
-
-			//System.out.println(trade.getSecDetails().getSecId());
 			
-			rowsAdded=ps.executeUpdate();
-		} catch(SQLException sq) {
-			sq.printStackTrace();
-		}
-		
-		catch (Exception e) {
+			ps.setDouble(4, trade.getTradePrice());
+			ps.setString(5, trade.getCounterParty());
+			ps.setDate(6, trade.getSettlementDate());
+			ps.setDate(7, trade.getLastCouponDate());
+			// TODO: Remove Ticks from pojo and database table if not required else provide value during initialization
+			trade.setTicks(0.0d); ps.setDouble(8, trade.getTicks());
+			ps.setDouble(9,trade.getDirtyPrice());
+			ps.setDouble(10, trade.getCleanPrice());
+			ps.setDouble(11,trade.getMarketPrice());
+			ps.setDouble(12, trade.getMarketYield());
+			ps.setDouble(13, trade.getTradeYield());
+			ps.setInt (14, trade.getSecDetails().getSecId());
+			ps.setInt(15, trade.getUserDetails().getId());
+						
+			ResultSet set = ps.executeQuery();
+			if(set.next()) {
+				rowsAdded = 1;
+				Integer tradeId = set.getInt("tradeid");
+				AccruedDAO accruedDAO = new AccruedDAOImpl();
+				accruedDAO.addAccrued(trade.getAccrued(), tradeId);
+			}
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			// TODO Handle exceptions properly
 			e.printStackTrace();
@@ -62,159 +65,16 @@ public class TradeDAOImpl implements TradeDAO {
 		return rowsAdded;
 	}
 
-	@Override
-	public Trade findTradeByTradeId(int tradeId) {
-		// TODO Auto-generated method stub
-		Trade trade=null;
-		String FIND_BY_TradeId="SELECT * FROM TRADES WHERE TRADEID=?";
-//		String FIND_BY_TradeId_Acc = "SELECT * FROM ACCRUEDS WHERE TRADEID=?";
-		String FIND_BY_TradeId_Users = "SELECT * FROM USERS WHERE USERID=?";
-		String FIND_BY_TradeId_Sec = "SELECT * FROM SECURITIES WHERE SECID=?";
-		try(Connection con=DatabaseConnection.openConnection();)
-		{
-			PreparedStatement ps=con.prepareStatement(FIND_BY_TradeId);
-			ps.setInt(1, tradeId);
-			ResultSet set=ps.executeQuery();
-			
-		
-//			PreparedStatement ps1=con.prepareStatement(FIND_BY_TradeId_Acc);
-//			ps1.setInt(1, tradeId);
-//			ResultSet set1=ps1.executeQuery();
-//			
-			PreparedStatement ps2=con.prepareStatement(FIND_BY_TradeId_Users);
-			PreparedStatement ps3=con.prepareStatement(FIND_BY_TradeId_Sec);
-			
-			
-			while(set.next())
-			{
-			
-			int tradeId1 = set.getInt(1);
-			Date tradeDate = set.getDate(2);
-			Time tradeTime = set.getTime(3);
-			
-			String tradeType = set.getString(4);
-			String tradePrice = set.getString(5);
-			String counterparty  = set.getString(6);
-			Date settlDate = set.getDate(7);
-			Date lastCouDate = set.getDate(8);
-			float ticks = set.getFloat(9);
-			float dirtyPrice = set.getFloat(10);
-			float cleanPrice = set.getFloat(11);
-			int secId = set.getInt(12);
-			int userid = set.getInt(13);
-			ps2.setInt(1, userid);
-			ResultSet set2=ps2.executeQuery();
-			//set1.next();
-			set2.next();
-//			List<Accrued> acc = new LinkedList<>();
-//			acc.add(new Accrued(set1.getInt(1),set1.getFloat(2),set1.getString(3),set1.getFloat(4)));
-			User userDetails = new User(set2.getInt(1), set2.getString(2), set2.getString(3), set2.getString(4), set2.getString(5), 
-					set2.getString(6), set2.getString(7));
-				
-		
-			ps3.setInt(1, secId);
-			ResultSet set3=ps3.executeQuery();
-			set3.next();
-			Security secDetails = new Security(set3.getInt(1), set3.getString(2), set3.getString(3), 
-					set3.getFloat(4), set3.getFloat(5), set3.getInt(6), set3.getDate(7), set3.getInt(8), set3.getString(9), set3.getString(10));
-			trade = new Trade(tradeId1, tradeDate, tradeTime, tradeType, tradePrice, counterparty, settlDate, null, lastCouDate, ticks, 
-					dirtyPrice, cleanPrice, secDetails, userDetails);
-			}
-			
-		} catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-		return trade;
-		
-	}
-
-	
-	@Override
-	public int deleteTrade(int tradeid) {
-		// TODO Auto-generated method stub
-		int rowsModified=0;
-		String REMOVE_TRADE="DELETE FROM TRADES WHERE TRADEID=?";
-		String REMOVE_ACCRUEDS="DELETE FROM ACCRUEDS WHERE TRADEID=?";
-		try(Connection con=DatabaseConnection.openConnection();)
-		{
-			PreparedStatement ps=con.prepareStatement(REMOVE_ACCRUEDS);
-			ps.setInt(1, tradeid);
-			rowsModified = ps.executeUpdate();
-			
-			PreparedStatement ps1=con.prepareStatement(REMOVE_TRADE);
-			ps1.setInt(1, tradeid);
-			rowsModified =rowsModified+ ps1.executeUpdate();
-		} catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-		return rowsModified;
-		
-	}
-
-	
-
-	@Override
-	public
-	List<Trade> findTradeByUserId(User user) {
-		// TODO Auto-generated method stub
-		Trade trade=null;
-		List<Trade> list = new ArrayList<>();
-		String FIND_BY_User="SELECT * FROM TRADES WHERE USERID=?";
-//		String FIND_BY_UserID_Acc = "SELECT * FROM ACCRUEDS WHERE TRADEID=?";
-//		String FIND_BY_UserId_Users = "SELECT * FROM USERS WHERE USERID=?";
-    	//String FIND_BY_UserId_Sec = "SELECT * FROM SECURITIES WHERE SECID=?";
-		try(Connection con=DatabaseConnection.openConnection();)
-		{
-			PreparedStatement ps=con.prepareStatement(FIND_BY_User);
-			ps.setInt(1, user.getId());
-			ResultSet set=ps.executeQuery();
-			
-//			PreparedStatement ps1=con.prepareStatement(FIND_BY_UserID_Acc);
-			//ps1.setInt(1, );
-//			ResultSet set1=ps1.executeQuery();
-			
-//			PreparedStatement ps2=con.prepareStatement(FIND_BY_UserId_Users);
-		    
-			
-			
-			while(set.next())
-			{
-			
-			int tradeId1 = set.getInt(1);
-			Date tradeDate = set.getDate(2);
-			Time tradeTime = set.getTime(3);
-			
-			String tradeType = set.getString(4);
-			String tradePrice = set.getString(5);
-			String counterparty  = set.getString(6);
-			Date settlDate = set.getDate(7);
-			Date lastCouDate = set.getDate(8);
-			float ticks = set.getFloat(9);
-			float dirtyPrice = set.getFloat(10);
-			float cleanPrice = set.getFloat(11);
-			int secId = set.getInt(12);
-			int userid = set.getInt(13);
-//			ps2.setInt(1, userid);
-//			ResultSet set2=ps2.executeQuery();
-//		set1.next();
-//			set2.next();
-//			List<Accrued> acc = new LinkedList<>();
-//			acc.add(new Accrued(set1.getInt(1),set1.getFloat(2),set1.getString(3),set1.getFloat(4)));
-//			User userDetails = new User(set2.getInt(1),set2.getString(2),set2.getString(3));
-//			PreparedStatement ps3=con.prepareStatement(FIND_BY_User);			
-//			ps3.setInt(1, secId);
-//			ResultSet set3=ps3.executeQuery();
-//			set3.
-//			set3.next();
-//			Security secDetails = new Security(set3.getInt(1), set3.getString(2), set3.getString(3), 
-//					set3.getFloat(4), set3.getFloat(5), set3.getInt(6), set3.getDate(7), set3.getInt(8), set3.getString(9), set3.getString(10));
-		trade = new Trade(tradeId1, tradeDate, tradeTime, tradeType, tradePrice, counterparty, settlDate, null, lastCouDate, ticks, 
-				dirtyPrice, cleanPrice, null, user);
-		list.add(trade);
-			}
-			//ResultSet set=ps.executeQuery();
+//	@Override
+//	public Trade findTradeByTradeId(int tradeId) {
+//		// TODO Auto-generated method stub
+//		Trade trade=null;
+//		String FIND_BY_TradeId="SELECT * FROM TRADES WHERE TRADEID=?";
+//		try(Connection con=DatabaseConnection.openConnection();)
+//		{
+//			PreparedStatement ps=con.prepareStatement(FIND_BY_TradeId);
+//			ps.setInt(1, tradeId);
+//			ResultSet set=ps.executeQuery();
 //			
 //			while(set.next())
 //			{
@@ -228,54 +88,126 @@ public class TradeDAOImpl implements TradeDAO {
 //				Date matdate=set.getDate(7);
 //				int dcc=set.getInt(8);
 //				String coupondates=set.getString(9);
-//				Security security=new Security(secid, secname, issuername, facevalue, couponrate, frequency, matdate, dcc, coupondates, ISIN1);
+//				security=new Security(secid, secname, issuername, facevalue, couponrate, frequency, matdate, dcc, coupondates, ISIN1);
 //				
-				
-			//}
-		} catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-		return list;
-		
-	}
+//				
+//			}
+//		} catch(SQLException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		return security;
+//		return null;
+//	}
+
 	@Override
-	public List<Trade> findTradeBySecId(Security security) {
+	public List<Trade> findTradeByUser(int userId) {
+			Trade trade=null;
+			List<Trade> list = new ArrayList<>();
+			String FIND_BY_User="SELECT * FROM TRADES WHERE USERID=?";
+			try(Connection con=DatabaseConnection.openConnection();)
+			{
+				PreparedStatement ps=con.prepareStatement(FIND_BY_User);
+				ps.setInt(1, userId);
+				ResultSet set=ps.executeQuery();
+				
+				
+				while(set.next())
+				{
+				
+				int tradeId = set.getInt(1);
+				Date tradeDate = set.getDate(2);
+				Time tradeTime = set.getTime(3);
+				String tradeType = set.getString(4);
+				Double tradePrice = set.getDouble(5);
+				String counterparty  = set.getString(6);
+				Date settlDate = set.getDate(7);
+				Date lastCouDate = set.getDate(8);
+				Double ticks = set.getDouble(9);
+				Double dirtyPrice = set.getDouble(10);
+				Double cleanPrice = set.getDouble(11);
+				Double marketPrice =set.getDouble(12);
+				Double marketYield =set.getDouble(13);
+				Double tradeYield = set.getDouble(14);
+				int secId = set.getInt(15);
+				SecurityDAO secdao = new SecurityDAOImpl();
+				Security sec= secdao.findSecuritybySecurityId(secId);
+				Integer userid = set.getInt(16);
+				UserDAO udao = new UserDAOImpl();
+				User u= udao.findUserByuserId(userid);
+			
+				trade = new Trade(tradeId, tradeDate, tradeTime, tradeType, marketPrice, marketYield, tradePrice, tradeYield, counterparty, settlDate, null, lastCouDate, ticks, dirtyPrice, cleanPrice, sec, u);
+				list.add(trade);
+				}
+				
+			} catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+			return list;
+			
+		}
+
+
+	@Override
+	public int deleteTrade(int tradeid) {
+				int rowsModified=0;
+				String REMOVE_TRADE="DELETE FROM TRADES WHERE TRADEID=?";
+				String REMOVE_ACCRUEDS="DELETE FROM ACCRUEDS WHERE TRADEID=?";
+				try(Connection con=DatabaseConnection.openConnection();)
+				{
+					PreparedStatement ps=con.prepareStatement(REMOVE_ACCRUEDS);
+					ps.setInt(1, tradeid);
+					rowsModified = ps.executeUpdate();
+					
+					PreparedStatement ps1=con.prepareStatement(REMOVE_TRADE);
+					ps1.setInt(1, tradeid);
+					rowsModified =rowsModified+ ps1.executeUpdate();
+				} catch(SQLException e)
+				{
+					e.printStackTrace();
+				}
+				return rowsModified;
+	}
+
+	
+	@Override
+	public List<Trade> findAllTradesBySecurityId(int secId ) {
 		List<Trade> list = new ArrayList<>();
-		String FIND_BY_SECID="SELECT * FROM TRADES WHERE SECID=?";
+		Trade trade=null;
+		String FIND_BY_SECID="SELECT * FROM TRADES WHERE SECID=? ORDER BY  TRADE_DATE DESC,TRADE_TIME DESC ";
     	
 		try(Connection con=DatabaseConnection.openConnection();)
 		{
 			PreparedStatement ps=con.prepareStatement(FIND_BY_SECID);
-			ps.setInt(1, security.getSecId());
+			ps.setInt(1, secId);
 			ResultSet set=ps.executeQuery();
 
 			while(set.next())
 			{
+				int tradeId = set.getInt(1);
+				Date tradeDate = set.getDate(2);
+				Time tradeTime = set.getTime(3);
+				String tradeType = set.getString(4);
+				Double tradePrice = set.getDouble(5);
+				String counterparty  = set.getString(6);
+				Date settlDate = set.getDate(7);
+				Date lastCouDate = set.getDate(8);
+				Double ticks = set.getDouble(9);
+				Double dirtyPrice = set.getDouble(10);
+				Double cleanPrice = set.getDouble(11);
+				Double marketPrice =set.getDouble(12);
+				Double marketYield =set.getDouble(13);
+				Double tradeYield = set.getDouble(14);
+				secId = set.getInt(15);
+				SecurityDAO secdao = new SecurityDAOImpl();
+				Security sec= secdao.findSecuritybySecurityId(secId);
+				Integer userid = set.getInt(16);
+				User u = new User();
+				u.setId(userid);
+				trade = new Trade(tradeId, tradeDate, tradeTime, tradeType, marketPrice, marketYield, tradePrice, tradeYield, counterparty, settlDate, null, lastCouDate, ticks, dirtyPrice, cleanPrice, sec, u);
 			
-			int tradeId1 = set.getInt(1);
-			Date tradeDate = set.getDate(2);
-			Time tradeTime = set.getTime(3);
-			
-			String tradeType = set.getString(4);
-			String tradePrice = set.getString(5);
-			String counterparty  = set.getString(6);
-			Date settlDate = set.getDate(7);
-			Date lastCouDate = set.getDate(8);
-			float ticks = set.getFloat(9);
-			float dirtyPrice = set.getFloat(10);
-			float cleanPrice = set.getFloat(11);
-			int secId = set.getInt(12);
-			int userid = set.getInt(13);
-//			PreparedStatement ps3=con.prepareStatement(FIND_BY_USER);			
-//			ps3.setInt(1, secId);
-//			ResultSet set3=ps3.executeQuery();
-//			set3.next();
-		//	Security secDetails = new Security(set3.getInt(1), set3.getString(2), set3.getString(3), 
-			//		set3.getFloat(4), set3.getFloat(5), set3.getInt(6), set3.getDate(7), set3.getInt(8), set3.getString(9), set3.getString(10));
-		Trade trade = new Trade(tradeId1, tradeDate, tradeTime, tradeType, tradePrice, counterparty, settlDate, null, lastCouDate, ticks, 
-				dirtyPrice, cleanPrice,security, null);
-		list.add(trade);
+				list.add(trade);
 			}
 		} catch(SQLException e)
 		{
@@ -286,73 +218,46 @@ public class TradeDAOImpl implements TradeDAO {
 	}
 
 	@Override
-	public List<Trade> findAllTrades() {
-		// TODO Auto-generated method stub
-		List<Trade> list = new ArrayList<>();
-		String FIND_ALL_TRADES="SELECT * FROM TRADES";
-		
+	public Trade findTradeByTradeId(int tradeId) {
+		Trade trade=null;
+		String FIND_BY_TRADEID="SELECT * FROM TRADES WHERE TRADEID=?";
+    	
 		try(Connection con=DatabaseConnection.openConnection();)
 		{
-			PreparedStatement ps=con.prepareStatement(FIND_ALL_TRADES);
+			PreparedStatement ps=con.prepareStatement(FIND_BY_TRADEID);
+			ps.setInt(1, tradeId);
 			ResultSet set=ps.executeQuery();
+
 			while(set.next())
 			{
-				int tradeId1 = set.getInt(1);
+				tradeId = set.getInt(1);
 				Date tradeDate = set.getDate(2);
 				Time tradeTime = set.getTime(3);
-				
 				String tradeType = set.getString(4);
-				String tradePrice = set.getString(5);
+				Double tradePrice = set.getDouble(5);
 				String counterparty  = set.getString(6);
 				Date settlDate = set.getDate(7);
 				Date lastCouDate = set.getDate(8);
-				float ticks = set.getFloat(9);
-				float dirtyPrice = set.getFloat(10);
-				float cleanPrice = set.getFloat(11);
-				int secId = set.getInt(12);
-				int userid = set.getInt(13);
-				Security security=new Security(secId, "", "", 2.8f, 2.6f, 2, new Date(2018,10,23), 4,"", "");
-				User user=new User(userid, "", "", "", "", "", "");
-				Trade trade = new Trade(tradeId1, tradeDate, tradeTime, tradeType, tradePrice, counterparty, settlDate, null, lastCouDate, ticks, 
-						dirtyPrice, cleanPrice,security, user);
-				list.add(trade);
+				Double ticks = set.getDouble(9);
+				Double dirtyPrice = set.getDouble(10);
+				Double cleanPrice = set.getDouble(11);
+				Double marketPrice =set.getDouble(12);
+				Double marketYield =set.getDouble(13);
+				Double tradeYield = set.getDouble(14);
+				int secId = set.getInt(15);
+				SecurityDAO secdao = new SecurityDAOImpl();
+				Security sec= secdao.findSecuritybySecurityId(secId);
+				Integer userid = set.getInt(16);
+				User u = new User();
+				u.setId(userid);
+				trade = new Trade(tradeId, tradeDate, tradeTime, tradeType, marketPrice, marketYield, tradePrice, tradeYield, counterparty, settlDate, null, lastCouDate, ticks, dirtyPrice, cleanPrice, sec, u);
 			}
-			}
-		 catch(SQLException e)
+			
+		} catch(SQLException e)
 		{
 			e.printStackTrace();
 		}
-		return list;
-	}
-
-	@Override
-	public HashMap<String, Integer> findAllTradesCount() {
-		// TODO Auto-generated method stub
-				//User user=null;
-				String FINDALLTRADES="SELECT SECURITY_NAME, COUNT(*) AS FREQ FROM TRADES T, SECURITIES S WHERE T.SECID = S.SECID GROUP BY SECURITY_NAME";
-				List<Trade> list = new ArrayList<>();
-				HashMap<String,Integer> pie = new HashMap<String, Integer>();
-				try(Connection con=DatabaseConnection.openConnection();)
-				{
-					Statement st = con.createStatement();
-					ResultSet set = st.executeQuery(FINDALLTRADES);
-					//HashMap<String,Integer> pie = new HashMap<String, Integer>();
-		//System.out.println("DB set" + set);
-					while(set.next())
-					{
-						
-						String name = set.getString(1);
-						int freq = set.getInt(2);
-						System.out.println("NAME: " + name);
-						pie.put(name, freq);
-					}
-				} catch(SQLException e)
-				{System.out.println("ERROR");
-					e.printStackTrace();
-				}
-				//System.out.println("DB PIE" + pie);
-				return pie; 
-
+		return trade;
 	}
 
 }

@@ -3,68 +3,41 @@ package com.beans;
 import java.util.List;
 
 public class Accrued {
-	private Integer AccruedDays;
-	private Float AccruedInterest;
-	private String MarketPrice;
-	private Float MarketYield;
+	private Integer AccId;
+	private Double AccruedDays;
+	private Double AccruedInterest;
 	
 	public Accrued() {
 		super();
 	}
 
-
-	
-	public Accrued(int accruedDays, float accruedInterest, String marketPrice, float marketYield) {
+	public Accrued(Integer accId, Double accruedDays, Double accruedInterest) {
 		super();
+		AccId = accId;
 		AccruedDays = accruedDays;
 		AccruedInterest = accruedInterest;
-		MarketPrice = marketPrice;
-		MarketYield = marketYield;
 	}
 
-
-
-	public int getAccruedDays() {
+	public Double getAccruedDays() {
 		return AccruedDays;
 	}
 
-
-	public void setAccruedDays(int accruedDays) {
+	public void setAccruedDays(Double accruedDays) {
 		AccruedDays = accruedDays;
 	}
 
 
-	public float getAccruedInterest() {
+	public Double getAccruedInterest() {
 		return AccruedInterest;
 	}
 
-
-	public void setAccruedInterest(float accruedInterest) {
+	public void setAccruedInterest(Double accruedInterest) {
 		AccruedInterest = accruedInterest;
 	}
 
-
-	public String getMarketPrice() {
-		return MarketPrice;
+	@Override
+	public String toString() {
+		return "Accrued [AccId=" + AccId + ", AccruedDays=" + AccruedDays + ", AccruedInterest=" + AccruedInterest
+				+ "]";
 	}
-
-
-	public void setMarketPrice(String marketPrice) {
-		MarketPrice = marketPrice;
-	}
-
-
-	public float getMarketYield() {
-		return MarketYield;
-	}
-
-
-	public void setMarketYield(float marketYield) {
-		MarketYield = marketYield;
-	}
-	
-	
-	
-	
-
 }

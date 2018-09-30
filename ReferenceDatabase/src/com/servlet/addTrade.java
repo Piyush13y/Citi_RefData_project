@@ -1,11 +1,13 @@
 package com.servlet;
+import com.beans.Trade;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -14,13 +16,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.algo.DynamicDataCal;
+import com.algo.DynamicDataCalImpl;
 import com.beans.Accrued;
 import com.beans.Security;
 import com.beans.Trade;
 import com.beans.User;
+import com.daos.SecurityDAO;
 import com.daos.TradeDAO;
 import com.daos.UserDAO;
+import com.impl.SecurityDAOImpl;
 import com.impl.TradeDAOImpl;
 import com.impl.UserDAOImpl;
 
@@ -43,61 +50,111 @@ public class addTrade extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
 		String uname = request.getParameter("user");
+		//System.out.println("username is:-"+uname);
 		UserDAO udao = new UserDAOImpl();
 		User userDetails = udao.findUserbyUsername(uname);
-		Time tradeTime=null;
-		Date tradeDate=null;
-		Date settlementDate=null;
-		SimpleDateFormat formate = new SimpleDateFormat("yyyy MM DD");
-		SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
-		try {
-			 tradeDate = formate.parse(request.getParameter("tradeDate"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			tradeTime = (Time) time.parse(request.getParameter("time"));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String tradeType = request.getParameter("tradetype");
-		String tradePrice = request.getParameter("tradeprice");
+		
+		String tradeType = request.getParameter("tradeType");
 		String counterparty = request.getParameter("counterparty");
+		
+		Double tradePrice=250d;
+		System.out.println("some");
+		System.out.println("decimal: "+request.getParameter("decimal"));
+		if(request.getParameter("decimal")!="") {
+			tradePrice=Double.parseDouble(request.getParameter("decimal"));
+		} else {
+			 tradePrice= Double.parseDouble(request.getParameter("fractionWhole"))+(Double.parseDouble(request.getParameter("fractionPart"))/32);
+		}
+//		String[] tDate= request.getParameter("tradeDate").split("-");
+//		int [] tDateArray = new int[tDate.length];
+//		for(int i=0;i<tDate.length;i++) {
+//			tDateArray[i]=Integer.parseInt(tDate[i]);
+//		}
+		Date tradeDate=null;
 		try {
-			settlementDate = formate.parse(request.getParameter("settlementdate"));
+			tradeDate = new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("tradeDate")).getTime());
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		Date settlementDate = null;
+		if(request.getParameter("settlementDate").equals("0")) {
+			try {
+				settlementDate= new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("tradeDate")).getTime());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (request.getParameter("settlementDate").equals("1")) {
+			DynamicDataCal cal = new DynamicDataCalImpl(3);
+			try {
+				settlementDate= cal.dateDaysAfter(new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("tradeDate")).getTime()), 1);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			DynamicDataCal cal = new DynamicDataCalImpl(3);
+			try {
+				settlementDate= cal.dateDaysAfter(new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("tradeDate")).getTime()), 2);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		Time tradeTime=null;
+		try {
+			tradeTime = new java.sql.Time(new SimpleDateFormat("HH:mm:ss").parse("11:10:07").getTime());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		List<Accrued> list = new ArrayList<>();
-		list = null;
-		int secId = 0;
-		String securityName = "a";
-		String issuerName = "w";
-		float faceValue = 23f;
-		float couponRate = 2.3f;
-		int frequency = 6;
-		Date maturityDate = new Date(2018, 2, 2);
-		int dayCountConvention = 9;
-		String couponDates = "www";
-		String iSIN = "11111";
-		Security sec = new Security(secId, securityName, issuerName, faceValue, couponRate, frequency, (java.sql.Date) maturityDate, dayCountConvention, couponDates, iSIN);
-		float ticks = 0;
-		Integer i = 0;
-		Trade trade = new Trade(i, (java.sql.Date)tradeDate, tradeTime, tradeType, tradePrice, counterparty, (java.sql.Date)settlementDate, list, (java.sql.Date)settlementDate, ticks, 0f, 0f, sec, userDetails);
-
+		System.out.println(request.getParameter("secName"));
+		int securityId = Integer.parseInt(request.getParameter("secName"));
+		SecurityDAO daosec = new SecurityDAOImpl();
+		Security security = daosec.findSecuritybySecurityId(securityId);
+		Double marketPrice=0d;
 		TradeDAO dao = new TradeDAOImpl();
+		List<Trade> td= dao.findAllTradesBySecurityId(security.getSecId());
+		if(td.size()==0) {
+			marketPrice=tradePrice;
+		} else {
+			marketPrice=td.get(0).getTradePrice();
+		}
+		Integer tradeId=null;	
+		Float cleanPrice=null;
+		Float dirtyPrice=null;
+		Float ticks=null;
+		java.sql.Date lastCouponDate=null;
+		List<Accrued> accrued=null;				
+		Trade trade = new Trade(tradeId, tradeDate, tradeTime, tradeType, marketPrice, null, tradePrice, null, counterparty, settlementDate, null, null, null, null, null, security, userDetails);
+		
+		int dayCountConvention = security.getDayCountConvention();
+		DynamicDataCal dynamicData = new DynamicDataCalImpl(dayCountConvention);
+		dynamicData.initializeTrade(trade);
+		accrued=trade.getAccrued();
+		
+		//TO DO add to accrued table
+		
+		
+		System.out.println(trade);
 		int result = dao.addTrade(trade);
 		if(result>0) {
 			request.setAttribute("successmessage", "Trade added successfully");
-			RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
-			dispatcher.forward(request, response);
+			//request.setAttribute("accValues", accrued);
+			//request.setAttribute("tradeDetails", trade);
+//			RequestDispatcher dispatcher = request.getRequestDispatcher("./dashboard/home.jsp");
+//			dispatcher.forward(request, response);
+			HttpSession session = request.getSession();
+			List<Trade> tradeLst = dao.findTradeByUser(userDetails.getId());
+			session.setAttribute("tradeList", tradeLst);
+			response.sendRedirect("./dashboard/home.jsp");
 		} else {
 			request.setAttribute("errormessage", "Error! Please try again!");
-			RequestDispatcher dispatcher = request.getRequestDispatcher("home.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("./dashboard/home.jsp");
 			dispatcher.forward(request, response);
 		}
 	}

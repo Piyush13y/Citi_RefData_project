@@ -14,7 +14,6 @@ import com.beans.User;
 import com.daos.UserDAO;
 import com.impl.UserDAOImpl;
 
-import sun.print.resources.serviceui_es;
 
 /**
  * Servlet implementation class user_profile_servlet
@@ -40,29 +39,29 @@ public class user_profile_servlet extends HttpServlet {
 		
 		UserDAO dao= new UserDAOImpl();
 		HttpSession session = request.getSession();
-String USERNAME = (String)session.getAttribute("USERNAME");
-String USERFNAME=request.getParameter("USERFNAME");
-String USERLNAME=request.getParameter("USERLNAME");
-String CONTACT=request.getParameter("CONTACT");
-String GENDER=request.getParameter("GENDER");
-
-System.out.println(USERNAME+USERFNAME+USERLNAME+CONTACT+GENDER);
-
-User user=dao.findUserbyUsername(USERNAME);
-//user.setUsername(USERNAME);
-user.setUserFname(USERFNAME);
-user.setUserLname(USERLNAME);
-user.setGender(GENDER);
-user.setContact(CONTACT);
-
-int i =dao.modifyUser(user);
-
-if(i>0)
-	System.out.println("modified");
-else System.out.println("no modification");
-//User user=  new User(id, username, passcode, USERFNAME, USERLNAME, gender, contact)
-request.setAttribute("usersrv", user);
-response.sendRedirect("./dashboard/home.jsp");
+		String USERNAME = (String)session.getAttribute("USERNAME");
+			String USERFNAME=request.getParameter("USERFNAME");
+			String USERLNAME=request.getParameter("USERLNAME");
+			String CONTACT=request.getParameter("CONTACT");
+			String GENDER=request.getParameter("GENDER");
+			
+			System.out.println(USERNAME+USERFNAME+USERLNAME+CONTACT+GENDER);
+			
+			User user=dao.findUserbyUsername(USERNAME);
+			//user.setUsername(USERNAME);
+			user.setUserFname(USERFNAME);
+			user.setUserLname(USERLNAME);
+			user.setGender(GENDER);
+			user.setContact(CONTACT);
+			
+			int i =dao.modifyUser(user);
+			
+			if(i>0)
+				System.out.println("modified");
+			else System.out.println("no modification");
+			//User user=  new User(id, username, passcode, USERFNAME, USERLNAME, gender, contact)
+			request.setAttribute("usersrv", user);
+			response.sendRedirect("./dashboard/home.jsp");
 	
 	
 	
